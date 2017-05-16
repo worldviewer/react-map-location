@@ -24,8 +24,13 @@ class Map extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+		let coordinates;
+
 		if (nextProps.place) {
-			this.getCoordinates(nextProps.place);
+			this.getCoordinates(nextProps.place)
+				.then(coordinates => {
+					this.googleMap.panTo(coordinates);
+				});
 		}
 	}
 
@@ -42,23 +47,24 @@ class Map extends Component {
     }
 
     getCoordinates(address) {
-		this.geocoder.geocode({ address }, (results, status) => {
-			if (status === google.maps.GeocoderStatus.OK) {
-				console.log(results[0].geometry.location);
+    	return new Promise((resolve, reject) => {
+			this.geocoder.geocode({ address }, (results, status) => {
+				if (status === google.maps.GeocoderStatus.OK) {
+					if (this.marker) {
+						this.marker.setMap(null);
+					}
 
-				if (this.marker) {
-					this.marker.setMap(null);
+					this.marker = new google.maps.Marker({
+						map: this.googleMap,
+						position: results[0].geometry.location
+					});
+
+					resolve(results[0].geometry.location);
+				} else {
+					reject('Geocode unsuccessful');
 				}
-
-				this.marker = new google.maps.Marker({
-					map: this.googleMap,
-					position: results[0].geometry.location
-				});
-
-			} else {
-				alert("Geocode unsuccessful");
-			}
-		});    	
+			});
+    	})
     }
 
     setMapCenter(latitude, longitude) {
