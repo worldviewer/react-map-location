@@ -17,11 +17,21 @@ class List extends Component {
 	render() {
 		return (
 			<ul className="List">
-				{this.props.places.map((place, i) => (
-					<li key={i}
-						onClick={this.placeClickHandler}
-						className="place">{place}</li>
-				))}
+				{this.props.places.map((place, i) => {
+					let placeHTML = this.props.active === place ?
+						(<span className="active">{place}</span>) :
+						place;
+
+					return (
+						<li key={i}
+							onClick={this.placeClickHandler}
+							className="place">
+
+							{placeHTML}
+
+						</li>
+					)}
+				)}
 			</ul>
 		);
 	}

@@ -47,7 +47,8 @@ class App extends Component {
 			<div className="App">
 				<List
 					places={this.state.places}
-					placeClickHandler={this.clickPlaceName} />
+					placeClickHandler={this.clickPlaceName}
+					active={this.state.map.place} />
 				<Map
 					latitude={this.state.map.lat}
 					longitude={this.state.map.lng}
