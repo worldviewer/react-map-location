@@ -10,7 +10,8 @@ class List extends Component {
 	}
 
 	placeClickHandler(e) {
-		console.log(e.target.innerHTML);
+		let location = e.target.innerHTML;
+		this.props.placeClickHandler(location);
 	}
 
 	render() {

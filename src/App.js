@@ -11,7 +11,8 @@ class App extends Component {
 			map: {
 				lat: 37.7,
 				lng: -158.2,
-				zoom: 2
+				zoom: 2,
+				place: ''
 			},
 			places: [
 				"Hong Kong",
@@ -26,17 +27,32 @@ class App extends Component {
 				"Cape Town, South Africa"
 			]
 		}
+
+		this.clickPlaceName = this.clickPlaceName.bind(this);
+	}
+
+	clickPlaceName(place) {
+		console.log(place);
+
+		this.setState({
+			map: {
+				...this.state.map,
+				place
+			}
+		})
 	}
 
 	render() {
 		return (
 			<div className="App">
 				<List
-					places={this.state.places} />
+					places={this.state.places}
+					placeClickHandler={this.clickPlaceName} />
 				<Map
 					latitude={this.state.map.lat}
 					longitude={this.state.map.lng}
-					zoom={this.state.map.zoom} />
+					zoom={this.state.map.zoom}
+					place={this.state.map.place} />
 			</div>
 		);
 	}

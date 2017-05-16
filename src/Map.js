@@ -10,6 +10,7 @@ class Map extends Component {
 		this.APIkey = process.env.GMAP_KEY;
 		this.props = props;
 		this.initMap = this.initMap.bind(this);
+		this.getCoordinates = this.getCoordinates.bind(this);
 	}
 
 	componentWillMount() {
@@ -22,6 +23,12 @@ class Map extends Component {
 		this.loadJS('https://maps.googleapis.com/maps/api/js?key=' + this.APIkey + '&callback=initMap')
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.place) {
+			this.getCoordinates(nextProps.place);
+		}
+	}
+
     initMap() {
        	this.googleMap = new google.maps.Map(this.refs.map, {
 			center: {
@@ -30,6 +37,33 @@ class Map extends Component {
 			},
 			zoom: this.props.zoom
         });
+
+		this.geocoder = new google.maps.Geocoder();
+    }
+
+    getCoordinates(address) {
+		this.geocoder.geocode({ address }, (results, status) => {
+			if (status === google.maps.GeocoderStatus.OK) {
+				console.log(results[0].geometry.location);
+
+				if (this.marker) {
+					this.marker.setMap(null);
+				}
+
+				this.marker = new google.maps.Marker({
+					map: this.googleMap,
+					position: results[0].geometry.location
+				});
+
+			} else {
+				alert("Geocode unsuccessful");
+			}
+		});    	
+    }
+
+    setMapCenter(latitude, longitude) {
+    	let location = 
+		this.googleMap.setCenter(results[0].geometry.location);
     }
 
 	loadJS(src) {
@@ -41,11 +75,6 @@ class Map extends Component {
 	}
 
 	render() {
-		// const mapStyles = {
-		// 	height: '500px',
-		// 	width: '500px'
-		// };
-
 		return (
 			<div className="Map" id="map" ref="map"></div>
 		);
