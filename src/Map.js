@@ -8,7 +8,10 @@ class Map extends Component {
 	constructor(props) {
 		super(props);
 
-		this.APIkey = process.env.GMAP_KEY;
+		// Key is referrer restricted to
+		// https://worldviewer.github.io/react-map-location/
+		this.APIkey = 'AIzaSyDwtT6k0iFxxUDIg0CdaHtS6U_eegLV5DE';
+
 		this.props = props;
 		this.initMap = this.initMap.bind(this);
 		this.initList = this.initList.bind(this);
