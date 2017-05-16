@@ -15,20 +15,21 @@ class App extends Component {
 				place: ''
 			},
 			places: [
-				"Hong Kong",
-				"London, Great Britain",
-				"San Francisco, CA",
-				"Los Angeles, CA",
-				"Anchorage, AK",
-				"Amsterdam, Netherlands",
-				"Barcelona, Spain",
-				"Berlin, Germany",
-				"Rio de Janeiro, Brazil",
-				"Cape Town, South Africa"
+				{ name: "Hong Kong", coordinates: null },
+				{ name: "London, Great Britain", coodinates: null },
+				{ name: "San Francisco, CA", coordinates: null },
+				{ name: "Los Angeles, CA", coordinates: null },
+				{ name: "Anchorage, AK", coordinates: null },
+				{ name: "Amsterdam, Netherlands", coordinates: null },
+				{ name: "Barcelona, Spain", coordinates: null },
+				{ name: "Berlin, Germany", coordinates: null },
+				{ name: "Rio de Janeiro, Brazil", coordinates: null },
+				{ name: "Cape Town, South Africa", coordinates: null }
 			]
 		}
 
 		this.clickPlaceName = this.clickPlaceName.bind(this);
+		this.setPlaceCoordinates = this.setPlaceCoordinates.bind(this);
 	}
 
 	clickPlaceName(place) {
@@ -42,6 +43,12 @@ class App extends Component {
 		})
 	}
 
+	setPlaceCoordinates(places) {
+		this.setState({
+			places
+		});
+	}
+
 	render() {
 		return (
 			<div className="App">
@@ -50,10 +57,12 @@ class App extends Component {
 					placeClickHandler={this.clickPlaceName}
 					active={this.state.map.place} />
 				<Map
+					places={this.state.places}
 					latitude={this.state.map.lat}
 					longitude={this.state.map.lng}
 					zoom={this.state.map.zoom}
-					place={this.state.map.place} />
+					active={this.state.map.place}
+					setPlaceCoordinatesHandler={this.setPlaceCoordinates} />
 			</div>
 		);
 	}

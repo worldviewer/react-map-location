@@ -11,6 +11,7 @@ class Map extends Component {
 		this.APIkey = process.env.GMAP_KEY;
 		this.props = props;
 		this.initMap = this.initMap.bind(this);
+		this.initList = this.initList.bind(this);
 		this.getCoordinates = this.getCoordinates.bind(this);
 	}
 
@@ -25,8 +26,8 @@ class Map extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.place) {
-			this.getCoordinates(nextProps.place)
+		if (nextProps.active) {
+			this.getCoordinates(nextProps.active)
 				.then(coordinates => {
 					this.googleMap.panTo(coordinates);
 				})
@@ -52,6 +53,34 @@ class Map extends Component {
 		}, 400);
 
 		this.googleMap.addListener('center_changed', panHandler);
+
+		this.initList();
+    }
+
+    initList() {
+    	let places = [];
+
+    	let promiseArray = this.props.places.map(place => {
+    		return new Promise((resolve, reject) => {
+				this.geocoder.geocode({ address: place.name }, (results, status) => {
+					if (status === google.maps.GeocoderStatus.OK) {
+
+						resolve(places.push({
+							name: place.name,
+							coordinates: results[0].geometry.location
+						}));
+
+					} else {
+						reject('Geocode unsuccessful');
+					}
+				});    			
+    		});
+    	});
+
+    	Promise.all(promiseArray)
+    		.then(() => {
+    			this.props.setPlaceCoordinatesHandler(places);
+    		});
     }
 
     getCoordinates(address) {

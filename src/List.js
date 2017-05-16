@@ -18,9 +18,9 @@ class List extends Component {
 		return (
 			<ul className="List">
 				{this.props.places.map((place, i) => {
-					let placeHTML = this.props.active === place ?
-						(<span className="active">{place}</span>) :
-						place;
+					let placeHTML = this.props.active === place.name ?
+						(<span className="active">{place.name}</span>) :
+						place.name;
 
 					return (
 						<li key={i}
