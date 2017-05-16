@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import './Map.css';
+import _ from 'lodash';
 
 class Map extends Component {
 	constructor(props) {
@@ -24,13 +25,14 @@ class Map extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		let coordinates;
-
 		if (nextProps.place) {
 			this.getCoordinates(nextProps.place)
 				.then(coordinates => {
 					this.googleMap.panTo(coordinates);
-				});
+				})
+				.catch((err) => {
+					console.log(err);
+				})
 		}
 	}
 
@@ -44,6 +46,12 @@ class Map extends Component {
         });
 
 		this.geocoder = new google.maps.Geocoder();
+
+		let panHandler = _.debounce(e => {
+		  	console.log(this.googleMap.getCenter());
+		}, 400);
+
+		this.googleMap.addListener('center_changed', panHandler);
     }
 
     getCoordinates(address) {
@@ -65,11 +73,6 @@ class Map extends Component {
 				}
 			});
     	})
-    }
-
-    setMapCenter(latitude, longitude) {
-    	let location = 
-		this.googleMap.setCenter(results[0].geometry.location);
     }
 
 	loadJS(src) {
