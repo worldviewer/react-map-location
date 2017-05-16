@@ -13,6 +13,7 @@ class Map extends Component {
 		this.initMap = this.initMap.bind(this);
 		this.initList = this.initList.bind(this);
 		this.getCoordinates = this.getCoordinates.bind(this);
+		this.panHandler = this.panHandler.bind(this);
 	}
 
 	componentWillMount() {
@@ -50,35 +51,38 @@ class Map extends Component {
 		this.geocoder = new google.maps.Geocoder();
 
 		let panHandler = _.debounce(e => {
-			let distances = [];
-
-			this.props.unsetExactPlaceHandler();
-
-			let promiseArray = this.props.places.map(place => {
-				return new Promise((resolve, reject) => {
-
-					resolve(distances.push({
-						name: place.name,
-						distance: google.maps.geometry.spherical.computeDistanceBetween(this.googleMap.getCenter(), place.coordinates)
-					}));
-
-				});
-			});
-
-			Promise.all(promiseArray)
-				.then(() => {
-					distances.sort((a, b) => a.distance - b.distance);
-					this.props.setNearestPlaceHandler(distances[0].name);
-				})
-				.catch((err) => {
-					console.log(err);
-				})
-
+			this.panHandler();
 		}, 400);
 
 		this.googleMap.addListener('center_changed', panHandler);
 
 		this.initList();
+    }
+
+    panHandler() {
+		let distances = [];
+
+		this.props.unsetExactPlaceHandler();
+
+		let promiseArray = this.props.places.map(place => {
+			return new Promise((resolve, reject) => {
+
+				resolve(distances.push({
+					name: place.name,
+					distance: google.maps.geometry.spherical.computeDistanceBetween(this.googleMap.getCenter(), place.coordinates)
+				}));
+
+			});
+		});
+
+		Promise.all(promiseArray)
+			.then(() => {
+				distances.sort((a, b) => a.distance - b.distance);
+				this.props.setNearestPlaceHandler(distances[0].name);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
     }
 
     initList() {
