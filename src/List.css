@@ -11,6 +11,7 @@
 }
 
 .place {
+	cursor: pointer;
 	padding-left: 10px;
 	padding-top: 10px;
 }

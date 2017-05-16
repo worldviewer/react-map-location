@@ -6,6 +6,11 @@ class List extends Component {
 		super(props);
 
 		this.props = props;
+		this.placeClickHandler = this.placeClickHandler.bind(this);
+	}
+
+	placeClickHandler(e) {
+		console.log(e.target.innerHTML);
 	}
 
 	render() {
@@ -13,6 +18,7 @@ class List extends Component {
 			<ul className="List">
 				{this.props.places.map((place, i) => (
 					<li key={i}
+						onClick={this.placeClickHandler}
 						className="place">{place}</li>
 				))}
 			</ul>
