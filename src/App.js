@@ -12,7 +12,8 @@ class App extends Component {
 				lat: 37.7,
 				lng: -158.2,
 				zoom: 2,
-				place: ''
+				exactPlace: '',
+				nearestPlace: ''
 			},
 			places: [
 				{ name: "Hong Kong", coordinates: null },
@@ -30,22 +31,50 @@ class App extends Component {
 
 		this.clickPlaceName = this.clickPlaceName.bind(this);
 		this.setPlaceCoordinates = this.setPlaceCoordinates.bind(this);
+		this.setNearestPlace = this.setNearestPlace.bind(this);
+		this.unsetExactPlace = this.unsetExactPlace.bind(this);
+		this.unsetNearestPlace = this.unsetNearestPlace.bind(this);
 	}
 
 	clickPlaceName(place) {
-		console.log(place);
-
 		this.setState({
 			map: {
 				...this.state.map,
-				place
+				exactPlace: place
 			}
-		})
+		});
 	}
 
 	setPlaceCoordinates(places) {
 		this.setState({
 			places
+		});
+	}
+
+	setNearestPlace(place) {
+		this.setState({
+			map: {
+				...this.state.map,
+				nearestPlace: place
+			}
+		});
+	}
+
+	unsetExactPlace() {
+		this.setState({
+			map: {
+				...this.state.map,
+				exactPlace: ''
+			}
+		});
+	}
+
+	unsetNearestPlace() {
+		this.setState({
+			map: {
+				...this.state.map,
+				nearestPlace: ''
+			}
 		});
 	}
 
@@ -55,14 +84,17 @@ class App extends Component {
 				<List
 					places={this.state.places}
 					placeClickHandler={this.clickPlaceName}
-					active={this.state.map.place} />
+					active={this.state.map.nearestPlace} />
 				<Map
 					places={this.state.places}
 					latitude={this.state.map.lat}
 					longitude={this.state.map.lng}
 					zoom={this.state.map.zoom}
-					active={this.state.map.place}
-					setPlaceCoordinatesHandler={this.setPlaceCoordinates} />
+					active={this.state.map.exactPlace}
+					setPlaceCoordinatesHandler={this.setPlaceCoordinates}
+					setNearestPlaceHandler={this.setNearestPlace}
+					unsetNearestPlaceHandler={this.unsetNearestPlace}
+					unsetExactPlaceHandler={this.unsetExactPlace} />
 			</div>
 		);
 	}

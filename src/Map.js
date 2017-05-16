@@ -26,10 +26,11 @@ class Map extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.active) {
+		if (nextProps.active && !this.props.active) {
 			this.getCoordinates(nextProps.active)
 				.then(coordinates => {
 					this.googleMap.panTo(coordinates);
+					this.props.unsetNearestPlaceHandler();
 				})
 				.catch((err) => {
 					console.log(err);
@@ -51,10 +52,10 @@ class Map extends Component {
 		let panHandler = _.debounce(e => {
 			let distances = [];
 
+			this.props.unsetExactPlaceHandler();
+
 			let promiseArray = this.props.places.map(place => {
 				return new Promise((resolve, reject) => {
-
-					console.log(this);
 
 					resolve(distances.push({
 						name: place.name,
@@ -66,7 +67,8 @@ class Map extends Component {
 
 			Promise.all(promiseArray)
 				.then(() => {
-					console.log(distances);
+					distances.sort((a, b) => a.distance - b.distance);
+					this.props.setNearestPlaceHandler(distances[0].name);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -93,7 +95,7 @@ class Map extends Component {
 						}));
 
 					} else {
-						reject('Geocode unsuccessful');
+						reject('Geocode unsuccessful during initialization of places.');
 					}
 				});    			
     		});
@@ -120,7 +122,7 @@ class Map extends Component {
 
 					resolve(results[0].geometry.location);
 				} else {
-					reject('Geocode unsuccessful');
+					reject('Geocode unsuccessful during distance calculation.');
 				}
 			});
     	})
