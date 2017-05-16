@@ -24,8 +24,8 @@ class Map extends Component {
     initMap() {
        	this.googleMap = new google.maps.Map(this.refs.map, {
 			center: {
-				lat: this.props.lat,
-				lng: this.props.lng
+				lat: this.props.latitude,
+				lng: this.props.longitude
 			},
 			zoom: this.props.zoom
         });
