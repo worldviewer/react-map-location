@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 import React, { Component } from 'react';
+import './Map.css';
 
 class Map extends Component {
 	constructor(props) {
@@ -40,15 +41,13 @@ class Map extends Component {
 	}
 
 	render() {
-		const mapStyles = {
-			height: '500px',
-			width: '500px'
-		};
+		// const mapStyles = {
+		// 	height: '500px',
+		// 	width: '500px'
+		// };
 
 		return (
-			<div id="map"
-				ref="map"
-				style={mapStyles}></div>
+			<div className="Map" id="map" ref="map"></div>
 		);
 	}	
 }

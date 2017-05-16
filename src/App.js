@@ -11,13 +11,13 @@ class App extends Component {
 			map: {
 				lat: 37.7,
 				lng: -158.2,
-				zoom: 1
+				zoom: 2
 			},
 			places: [
 				"Hong Kong",
 				"London, Great Britain",
-				"San Francisco, CA, United States of America",
-				"Los Angeles, CA, United States of America",
+				"San Francisco, CA",
+				"Los Angeles, CA",
 				"Anchorage, AK",
 				"Amsterdam, Netherlands",
 				"Barcelona, Spain",

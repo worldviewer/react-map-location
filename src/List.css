@@ -1,0 +1,16 @@
+.List {
+	background-color: green;
+	color: white;
+	height: 100%;
+	left: 0;
+	margin: 0;
+	padding-top: 15px;
+	position: absolute;
+	top: 0;
+	width: 20%;
+}
+
+.place {
+	padding-left: 10px;
+	padding-top: 10px;
+}

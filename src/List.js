@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './List.css';
 
 class List extends Component {
 	constructor(props) {
@@ -9,9 +10,10 @@ class List extends Component {
 
 	render() {
 		return (
-			<ul>
+			<ul className="List">
 				{this.props.places.map((place, i) => (
-					<li key={i}>{place}</li>
+					<li key={i}
+						className="place">{place}</li>
 				))}
 			</ul>
 		);
