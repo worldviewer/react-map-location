@@ -22,7 +22,7 @@ class Map extends Component {
 
 		// Asynchronously load the Google Maps script, passing in the 
 		// callback reference
-		this.loadJS('https://maps.googleapis.com/maps/api/js?key=' + this.APIkey + '&callback=initMap')
+		this.loadJS('https://maps.googleapis.com/maps/api/js?key=' + this.APIkey + '&callback=initMap&libraries=geometry')
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -49,7 +49,29 @@ class Map extends Component {
 		this.geocoder = new google.maps.Geocoder();
 
 		let panHandler = _.debounce(e => {
-		  	console.log(this.googleMap.getCenter());
+			let distances = [];
+
+			let promiseArray = this.props.places.map(place => {
+				return new Promise((resolve, reject) => {
+
+					console.log(this);
+
+					resolve(distances.push({
+						name: place.name,
+						distance: google.maps.geometry.spherical.computeDistanceBetween(this.googleMap.getCenter(), place.coordinates)
+					}));
+
+				});
+			});
+
+			Promise.all(promiseArray)
+				.then(() => {
+					console.log(distances);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+
 		}, 400);
 
 		this.googleMap.addListener('center_changed', panHandler);
